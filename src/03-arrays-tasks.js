@@ -204,9 +204,9 @@ function getTail(arr, n) {
  *    +'20,21,22,23,24\n'
  *    +'30,31,32,33,34'
  */
-function toCsvText(/* arr */) {
-  throw new Error('Not implemented');
-  // return arr.splice((acc, elem) => `${acc}${elem.join()}\n`);
+function toCsvText(arr) {
+  const newArr = arr.map((elem) => elem.flat());
+  return newArr.join('\n');
 }
 
 /**
@@ -275,8 +275,10 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  // создаем массив, длина которого равна количеству повторений и позиции (с единицы)
+  // и заполняем элементами. flatMap = map() + flat()
+  return arr.flatMap((elem, index) => Array(index + 1).fill(elem));
 }
 
 
@@ -293,8 +295,9 @@ function propagateItemsByPositionIndex(/* arr */) {
  *   [ 1,2,3,4,5,6,7,8,9,10 ] => [ 10, 9, 8 ]
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
-function get3TopItems(/* arr */) {
-  throw new Error('Not implemented');
+function get3TopItems(arr) {
+  // сортируем в порядке убывания, отрезаем с 0 индека по 3 (не включая)
+  return arr.sort((a, b) => b - a).slice(0, 3);
 }
 
 
@@ -329,8 +332,10 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const digitsArr = arr.map((elem) => digits.indexOf(elem)).sort((a, b) => a - b);
+  return digitsArr.map((elem) => digits[elem]);
 }
 
 /**
@@ -579,22 +584,23 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
-  // if (arr.length <= 1) return arr;
-  // const n = Math.floor(arr.length / 2);
-  // const first = arr.filter((elem, index) => index < n);
-  // const last = arr.filter((elem, index) => index >= n);
-  // console.log(arr);
-  // console.log(n);
-  // console.log(first);
-  // console.log(last);
-  // const output = last;
-  // if (arr.length % 2 !== 0) {
-  //   output.push(arr[n + 1]);
-  // }
-  // output.push(first);
-  // return output.flat();
+function swapHeadAndTail(arr) {
+  const n = Math.floor(arr.length / 2);
+  const newArr = arr;
+  // последовательно перекидываем элементы из начала в конец массива
+  // стопим на середине массива
+  arr.map((elem, index) => {
+    if (index < n) {
+      newArr.push(newArr.shift());
+    } return elem;
+  });
+  // если кол-во эл-тов в массиве нечетное
+  // серединный элемент, оказавшийся в начале
+  // вырезаем и закидываем в середину
+  if (newArr.length % 2 !== 0) {
+    newArr.splice(n, 0, newArr.shift());
+  }
+  return newArr;
 }
 
 
