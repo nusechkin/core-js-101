@@ -28,8 +28,13 @@
  *      .catch((error) => console.log(error.message)) // 'Error: Wrong parameter is passed!
  *                                                    //  Ask her again.';
  */
-function willYouMarryMe(/* isPositiveAnswer */) {
-  throw new Error('Not implemented');
+function willYouMarryMe(isPositiveAnswer) {
+  return new Promise(((resolve, reject) => {
+    if (typeof isPositiveAnswer === 'boolean') {
+      if (isPositiveAnswer) { resolve('Hooray!!! She said "Yes"!'); } else { resolve('Oh no, she said "No".'); }
+    }
+    reject(new Error('Wrong parameter is passed! Ask her again.'));
+  }));
 }
 
 
@@ -48,8 +53,12 @@ function willYouMarryMe(/* isPositiveAnswer */) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  // новый промис разрешится, когда решились все переданные в массиве промисы
+  // Promise.all - возвращает результат только после обработки всех промисов
+  return new Promise((resolve, reject) => {
+    Promise.all(array).then((values) => { resolve(values); }, (err) => reject(err));
+  });
 }
 
 /**
@@ -71,8 +80,11 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  // Promise.race - возвращает самый быстрый ответ
+  return new Promise((resolve, reject) => {
+    Promise.race(array).then((value) => { resolve(value); }, (err) => { reject(err); });
+  });
 }
 
 /**
@@ -93,7 +105,40 @@ function getFastestPromise(/* array */) {
  *
  */
 function chainPromises(/* array, action */) {
+  // read -> chaining promises
   throw new Error('Not implemented');
+  // const result = new Array(array.length);
+  // const p = new Promise((resolve, reject) => {
+  //   for (let i = 0; i < array.length; i += 1) {
+  //     result[i] = Promise.resolve(array[i])
+  //       .then((val) => {
+  //         if (val.status === 'fulfilled') {
+  //           resolve(val);
+  //         } else {
+  //           resolve(' ');
+  //         }
+  //       }, (err) => reject(err));
+  //   }
+  // })
+  //   .then((res) => {
+  //     res.filter((elem) => elem !== ' ');
+  //     res.reduce(action);
+  //   })
+  //   .catch((err) => { console.log(err); });
+  // return p;
+
+  // const fulfilledResults = [];
+  // return new Promise((resolve, reject) => {
+  //   Promise.allSettled(array)
+  //     .then((results) => {
+  //       results.forEach((result) => {
+  //         if (result.status === 'fulfilled') {
+  //           fulfilledResults.push(result);
+  //         }
+  //       });
+  //       resolve(action(results));
+  //     }, (err) => { reject(err); });
+  // });
 }
 
 module.exports = {
