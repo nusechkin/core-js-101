@@ -134,8 +134,18 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(_rect1, _rect2) {
+  const rect1 = _rect1;
+  const rect2 = _rect2;
+  rect1.right = rect1.left + rect1.width;
+  rect1.bottom = rect1.top + rect1.height;
+  rect2.right = rect2.left + rect2.width;
+  rect2.bottom = rect2.top + rect2.height;
+  // если не пересекаются
+  if (rect1.left >= rect2.right || rect2.left >= rect1.right) return false; // по горизонтали
+  if (rect1.top >= rect2.bottom || rect2.top >= rect1.bottom) return false; // по вертикали
+
+  return true; // в остальных случаях
 }
 
 
@@ -217,8 +227,12 @@ function findFirstSingleChar(str) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const minNum = Math.min(a, b);
+  const maxNum = Math.max(a, b);
+  const openBracket = (isStartIncluded) ? '[' : '(';
+  const closeBracket = (isEndIncluded) ? ']' : ')';
+  return `${openBracket}${minNum}, ${maxNum}${closeBracket}`;
 }
 
 
@@ -354,8 +368,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -373,6 +387,23 @@ function toNaryString(/* num, n */) {
  */
 function getCommonDirectoryPath(/* pathes */) {
   throw new Error('Not implemented');
+  // const path = [];
+  // const arr = pathes.map((elem) => elem.split(''));
+  // const shortestPath = Math.min(arr.map((elem) => elem.length));
+  // console.log(arr.map((elem) => elem.length));
+  // console.log(shortestPath);
+  // for (let j = 0; j < shortestPath; j += 1) {
+  //   for (let i = 0; i < arr.length - 1; i += 1) {
+  //     // console.log(arr[i][j]);
+  //     if (arr[i][j] === arr[i + 1][j]) {
+  //       if (i === (arr.length - 1)) {
+  //         path.push(arr[i][j]);
+  //         // console.log(path);
+  //       }
+  //     }
+  //   }
+  // }
+  // return path.join('');
 }
 
 
@@ -394,8 +425,18 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  // (m, n) * (n, p) = (m, p)
+  const arr = Array.from(Array(m1.length), () => new Array(m2[0].length));
+  for (let i = 0; i < m1.length; i += 1) { // цикл по строкам
+    for (let j = 0; j < m2[0].length; j += 1) { // цикл по столбцам
+      arr[i][j] = 0;
+      for (let k = 0; k < m1[0].length; k += 1) { // цикл по строке
+        arr[i][j] += m1[i][k] * m2[k][j];
+      }
+    }
+  }
+  return arr;
 }
 
 
@@ -429,8 +470,21 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  // rows
+  if (position.find((x) => x.join('') === 'XXX')) return 'X';
+  if (position.find((x) => x.join('') === '000')) return '0';
+  // columns
+  for (let j = 0; j < 3; j += 1) {
+    if (position[0][j] === position[1][j] && position[1][j] === position[2][j]) {
+      return position[0][j];
+    }
+  }
+  // diagonals
+  if (position[0][0] === position[1][1] && position[1][1] === position[2][2]) return position[0][0];
+  if (position[0][2] === position[1][1] && position[1][1] === position[2][0]) return position[0][2];
+
+  return undefined;
 }
 
 
